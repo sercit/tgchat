@@ -9,7 +9,8 @@ use Auth;
 use Validator;
 use App\Event;
 
-use Calendar;
+use MaddHatter\LaravelFullcalendar\Facades\Calendar;
+
 
 class EventController extends Controller
 {
@@ -25,7 +26,6 @@ class EventController extends Controller
             );
         }
         $calendar_details = Calendar::addEvents($event_list);
-
         return view('events', compact('calendar_details'));
     }
     //

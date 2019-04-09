@@ -20,7 +20,7 @@ class EventController extends Controller
     }
     public function index(){
 //        $services = $this->service
-        $events = Event::get();
+        $events = Event::with('service')->where('service_id',Auth::user()->id)->get();
         $event_list = [];
         foreach ($events as $key => $event){
             $event_list[] = Calendar::event(

@@ -17,10 +17,7 @@ class CreateEventsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('event_name');
-            $table->integer('service_id')->unsigned();
-            $table->foreign('service_id')
-                ->references('id')
-                ->on('services');
+            $table->integer('service_id');
             $table->date('start_date');
             $table->date('end_date');
         });

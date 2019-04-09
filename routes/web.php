@@ -24,4 +24,7 @@ Route::get('services','ServiceController@index')->name('services.index');
 Route::post('services','ServiceController@addService')->name('services.add');
 Route::get('profile','ProfileController@show')->name('profile.show');
 Route::post('profile','ProfileController@editProfile')->name('profile.edit');
-//Route::post('services','ServiceController@addService')->name('services.add');
+Route::get('clients','ClientController@showAllClients')->name('clients.all');
+Route::post('clients','ClientController@addClient')->name('clients.add');
+Route::get('clients/{id}','ClientController@showSingleClient')->name('clients.single');
+Route::post('clients/{id}','ClientController@editClient')->name('clients.edit');

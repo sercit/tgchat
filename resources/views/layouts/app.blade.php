@@ -63,6 +63,9 @@
                                     <a class="dropdown-item" href="{{ url('events') }}">
                                         {{ __('Events') }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ url('clients') }}">
+                                        {{ __('Clients') }}
+                                    </a>
 
                                     <a class="dropdown-item" href="{{ url('services') }}">
                                         {{ __('Services') }}

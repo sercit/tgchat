@@ -21,30 +21,28 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('event_name', 'Event Name:') !!}
+                            {!! Form::label('service_id', 'Service Name:') !!}
                             <div class="">
-                            {!! Form::text('event_name', null, ['class'=>'form-control']) !!}
-                            {!! $errors->first('event_name','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::select('service_id', $services,null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('service_id','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            {!! Form::label('client_id', 'Client:') !!}
+                            <div class="">
+                                {!! Form::select('client_id', $clients,null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('client_id','<p class="alert alert-danger">:message</p>') !!}
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             {!! Form::label('start_date', 'Start Date:') !!}
                             <div class="">
                                 {!! Form::text('start_date', null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('start_date','<p class="alert alert-danger">:message</p>') !!}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            {!! Form::label('end_date', 'End Date:') !!}
-                            <div class="">
-                                {!! Form::text('end_date', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('end_date','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>

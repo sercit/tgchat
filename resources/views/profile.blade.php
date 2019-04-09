@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Services</div>
+            <div class="panel-heading">Profile</div>
             <div class="panel-body">
-                {!! Form::open(array('route' => 'services.add', 'method'=>'POST', 'files'=>'true')) !!}
+                {!! Form::open(array('route' => 'profile.edit', 'method'=>'POST', 'files'=>'true')) !!}
                 <div class="row">
                     <div class="col-xs-12">
                         @if (Session::has('success'))
@@ -19,47 +19,32 @@
                         @endif
 
                     </div>
-                    <div class="col-xs-4">
-                        <div class="form-group">
-                            {!! Form::label('service_name', 'Service Name:') !!}
-                            <div class="">
-                            {!! Form::text('service_name', null, ['class'=>'form-control']) !!}
-                            {!! $errors->first('service_name','<p class="alert alert-danger">:message</p>') !!}
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-xs-3">
+                    <div class="col-xs-12">
                         <div class="form-group">
-                            {!! Form::label('duration', 'Duration:') !!}
+                            <label for="id">id</label>
                             <div class="">
-                                {!! Form::text('duration', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('duration','<p class="alert alert-danger">:message</p>') !!}
+                                <p>{!! $user->id !!}</p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-xs-3">
+                    <div class="col-xs-12">
                         <div class="form-group">
-                            {!! Form::label('amount', 'Amount:') !!}
+                            {!! Form::label('email', 'Email:') !!}
                             <div class="">
-                                {!! Form::text('amount', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('amount','<p class="alert alert-danger">:message</p>') !!}
+                            {!! Form::text('email',$user->email, ['class'=>'form-control']) !!}
+                            {!! $errors->first('email','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-1 text-center">&nbsp;<br/>
-                        {!! Form::submit('Add Service', ['class'=>'btn btn-primary']) !!}
+                    <div class="col-xs-12 text-center">&nbsp;<br/>
+                        {!! Form::submit('Sumbit changes', ['class'=>'btn btn-primary']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">My Services:</div>
-            <div class="panel-body">
-                {!! print_r($services->all()) !!}
-            </div>
 
         </div>
     </div>

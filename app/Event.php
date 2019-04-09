@@ -10,4 +10,7 @@ class Event extends Model
         'event_name', 'start_date', 'end_date'
     ];
     //
+    public function service(){
+        return $this->belongsTo(Service::class);
+    }
 }

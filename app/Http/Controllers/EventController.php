@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
@@ -14,7 +15,11 @@ use MaddHatter\LaravelFullcalendar\Facades\Calendar;
 
 class EventController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
     public function index(){
+//        $services = $this->service
         $events = Event::get();
         $event_list = [];
         foreach ($events as $key => $event){
@@ -22,7 +27,7 @@ class EventController extends Controller
                 $event->event_name,
                 true,
                 new \DateTime($event->start_date),
-                new \DateTime($event->end_date.' +1 day')
+                new \DateTime($event->end_date)
             );
         }
         $calendar_details = Calendar::addEvents($event_list);

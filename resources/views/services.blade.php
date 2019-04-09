@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Event Calendar in Laravel 5 using Laravel-FullCalendar</div>
+            <div class="panel-heading">Services</div>
             <div class="panel-body">
-                {!! Form::open(array('route' => 'events.add', 'method'=>'POST', 'files'=>'true')) !!}
+                {!! Form::open(array('route' => 'services.add', 'method'=>'POST', 'files'=>'true')) !!}
                 <div class="row">
                     <div class="col-xs-12">
                         @if (Session::has('success'))
@@ -21,49 +21,50 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('event_name', 'Event Name:') !!}
+                            {!! Form::label('service_name', 'Service Name:') !!}
                             <div class="">
-                            {!! Form::text('event_name', null, ['class'=>'form-control']) !!}
-                            {!! $errors->first('event_name','<p class="alert alert-danger">:message</p>') !!}
+                            {!! Form::text('service_name', null, ['class'=>'form-control']) !!}
+                            {!! $errors->first('service_name','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
 
                     <div class="col-xs-3">
                         <div class="form-group">
-                            {!! Form::label('start_date', 'Start Date:') !!}
+                            {!! Form::label('duration', 'Duration:') !!}
                             <div class="">
-                                {!! Form::text('start_date', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('start_date','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::text('duration', null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('duration','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
 
                     <div class="col-xs-3">
                         <div class="form-group">
-                            {!! Form::label('end_date', 'End Date:') !!}
+                            {!! Form::label('amount', 'Amount:') !!}
                             <div class="">
-                                {!! Form::text('end_date', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('end_date','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::text('amount', null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('amount','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-1 text-center">&nbsp;<br/>
-                        {!! Form::submit('Add Event', ['class'=>'btn btn-primary']) !!}
+                        {!! Form::submit('Add Service', ['class'=>'btn btn-primary']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">MY Event Details</div>
+            <div class="panel-heading">My Services:</div>
             <div class="panel-body">
-                {!! $calendar_details->calendar() !!}
+                <ul>
+                @foreach($services as $service)
+                    <li>{{$service->service_name}}</li>
+                @endforeach
+                </ul>
             </div>
+
         </div>
     </div>
-@endsection
-
-@section('pageScript')
-    {!! $calendar_details->script() !!}
 @endsection

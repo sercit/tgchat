@@ -42,4 +42,34 @@ class ServiceController extends Controller
         \Session::flash('success','Service added successfully.');
         return Redirect::to('services');
     }
+    public function showSingleService($single){
+        $service = Service::where('id',$single)->get()->first();
+        return view('services.single', compact('service'));
+    }
+    public function edit(Request $request, $id){
+        $validator = Validator::make($request->all(),[
+            'service_name'=>'required',
+            'duration'=>'required',
+            'amount'=>'required'
+        ]);
+
+        if($validator->fails()){
+            \Session::flash('warning','Please enter the valid details');
+            return Redirect::to('/services/'.$request['id'])->withInput()->withErrors($validator);
+        }
+
+        $service = Service::where('id',$id)->get()->first();
+        $service->service_name = $request['service_name'];
+        $service->duration = $request['duration'];
+        $service->amount = $request['amount'];
+        $service->save();
+
+        \Session::flash('success','Service changed successfully.');
+        return Redirect::to('services');
+    }
+    public function destroy(Request $request, $id){
+        $service = Service::where('id',$id)->get()->first();
+        $service->delete();
+        return Redirect::to('/services');
+    }
 }

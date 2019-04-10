@@ -41,4 +41,28 @@ class ClientController extends Controller
             $client = Client::where('id',$single)->get()->first();
             return view('clients.single', compact('client'));
         }
+    public function edit(Request $request, $id){
+        $validator = Validator::make($request->all(),[
+            'client_name'=>'required',
+            'phone'=>'required',
+        ]);
+
+        if($validator->fails()){
+            \Session::flash('warning','Please enter the valid details');
+            return Redirect::to('/clients/'.$request['id'])->withInput()->withErrors($validator);
+        }
+
+        $client = Client::where('id',$id)->get()->first();
+        $client->client_name = $request['client_name'];
+        $client->phone = $request['phone'];
+        $client->save();
+
+        \Session::flash('success','Client changed successfully.');
+        return Redirect::to('clients');
+    }
+    public function destroy(Request $request, $id){
+        $clients = Client::where('id',$id)->get()->first();
+        $clients->delete();
+        return Redirect::to('/clients');
+    }
 }

@@ -58,11 +58,19 @@
         <div class="panel panel-primary">
             <div class="panel-heading">My Services:</div>
             <div class="panel-body">
-                <ul>
+                <div class="row">
                 @foreach($services as $service)
-                    <li>{{$service->service_name}}</li>
+                    <div class="col-xs-4 card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{$service->service_name}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$service->duration}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$service->amount}}Р</h6>
+                            <a href="{{url ('/services/'.$service->id)}}" class="card-link">Редактировать</a>
+                            <a href="#" class="card-link">Another link</a>
+                        </div>
+                    </div>
                 @endforeach
-                </ul>
+                </div>
             </div>
 
         </div>

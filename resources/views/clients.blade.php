@@ -48,11 +48,19 @@
         <div class="panel panel-primary">
             <div class="panel-heading">My Clients:</div>
             <div class="panel-body">
-                <ul>
-                @foreach($clients as $client)
-                        <li><a href="/clients/{{$client->id}}">{{$client->client_name}}</a> - <a href="tel:{{$client->phone}}">{{$client->phone}}</a></li>
-                @endforeach
-                </ul>
+                <div class="row">
+                    @foreach($clients as $client)
+                            <div class="col-xs-4 card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$client->client_name}}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{$client->phone}}</h6>
+                                    <a href="{{url ('/clients/'.$client->id)}}" class="card-link">Редактировать</a>
+                                    <a href="#" class="card-link">Another link</a>
+                              </div>
+                            </div>
+                    @endforeach
+                    </div>
+                </div>
             </div>
 
         </div>

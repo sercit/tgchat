@@ -27,7 +27,7 @@ class EventController extends Controller
                 $event->id,
                 true,
                 new \DateTime($event->start_date),
-                new \DateTime($event->start_date)
+                new \DateTime($event->start_date.' +1 day')
             );
         }
         $calendar_details = Calendar::addEvents($event_list);

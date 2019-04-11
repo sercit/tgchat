@@ -16,6 +16,10 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->integer('service_id')->unsigned();
+            $table->string('name');
+            $table->string('phone');
+            $table->date('date');
         });
     }
 

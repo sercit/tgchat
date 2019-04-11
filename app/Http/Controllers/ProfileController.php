@@ -20,6 +20,10 @@ class ProfileController extends Controller
     public function editProfile(Request $request){
         $validator = Validator::make($request->all(),[
             'email'=>'required|unique:users',
+            'firstname'=>'required',
+            'lastname'=>'required',
+            'patronymic'=>'required',
+            'address'=>'required',
         ]);
 
         if($validator->fails()){

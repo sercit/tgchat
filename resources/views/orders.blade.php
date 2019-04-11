@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Services</div>
+            <div class="panel-heading">Event Calendar in Laravel 5 using Laravel-FullCalendar</div>
             <div class="panel-body">
-                {!! Form::open(array('route' => 'services.add', 'method'=>'POST', 'files'=>'true')) !!}
+                {!! Form::open(array('route' => 'orders.add', 'method'=>'POST', 'files'=>'true')) !!}
                 <div class="row">
                     <div class="col-xs-12">
                         @if (Session::has('success'))
@@ -21,52 +21,62 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('service_name', 'Service Name:') !!}
+                            {!! Form::label('service_id', 'Service Name:') !!}
                             <div class="">
-                            {!! Form::text('service_name', null, ['class'=>'form-control']) !!}
-                            {!! $errors->first('service_name','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::select('service_id', $services,null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('service_id','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-xs-3">
+                    <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('duration', 'Duration:') !!}
+                            {!! Form::label('name', 'Имя:') !!}
                             <div class="">
-                                {!! Form::text('duration', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('duration','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::text('name', null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('name','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
-
                     <div class="col-xs-3">
                         <div class="form-group">
-                            {!! Form::label('amount', 'Amount:') !!}
+                            {!! Form::label('phone', 'Телефон:') !!}
                             <div class="">
-                                {!! Form::text('amount', null, ['class'=>'form-control']) !!}
-                                {!! $errors->first('amount','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::text('phone', null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('phone','<p class="alert alert-danger">:message</p>') !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            {!! Form::label('date', 'Дата:') !!}
+                            <div class="">
+                                {!! Form::text('date', null, ['class'=>'form-control']) !!}
+                                {!! $errors->first('date','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-1 text-center">&nbsp;<br/>
-                        {!! Form::submit('Add Service', ['class'=>'btn btn-primary']) !!}
+                        {!! Form::submit('Add Order', ['class'=>'btn btn-primary']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
         </div>
         <div class="panel panel-primary">
-            <div class="panel-heading">My Services:</div>
+            <div class="panel-heading">My Orders:</div>
             <div class="panel-body">
                 <div class="row">
-                @foreach($services as $service)
+                @foreach($orders as $order)
                     <div class="col-xs-4 card" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">{{$service->service_name}}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{$service->duration}}</h6>
-                            <h6 class="card-subtitle mb-2 text-muted">{{$service->amount}}Р</h6>
-                            <a href="{{url ('/services/'.$service->id)}}" class="card-link">Редактировать</a>
-                            <a href="#" class="card-link">Another link</a>
+                            <h5 class="card-title">{{$order->service_name}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$order->duration}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$order->amount}}Р</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$order->name}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$order->phone}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{$order->date}}</h6>
+                            <a href="{{route('orders.confirm', $order->id)}}" class="card-link">Подтвердить</a>
+                            <a href="{{route('orders.cancel', $order->id)}}" class="card-link">Отменить</a>
                         </div>
                     </div>
                 @endforeach

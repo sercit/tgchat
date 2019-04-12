@@ -24,13 +24,24 @@ class EventController extends Controller
         $event_list = [];
         foreach ($events as $key => $event){
             $event_list[] = Calendar::event(
-                $event->id,
-                true,
+                $event->service->service_name.'</span><br/></span>'.$event->client->phone,
+                false,
                 new \DateTime($event->start_date),
-                new \DateTime($event->start_date.' +1 day')
+                new \DateTime($event->start_date.' +'.$event->service->duration.' minutes')
             );
         }
-        $calendar_details = Calendar::addEvents($event_list);
+        $calendar_details = Calendar::addEvents($event_list)
+                                    ->setOptions([
+                                        'firstDay' => 1,
+                                        'axisFormat' => 'H:mm',
+                                        'timeFormat' => 'H:mm',
+                                        'allDaySlot'=> false,
+                                        'navLinks' => true,
+                                        'locales'=> 'ru',
+
+                                    ])->setCallbacks([
+                                        'eventClick' => 'function(info){console.log(info)}',
+                                    ]);
         $services = Service::where('user_id',Auth::user()->id)->pluck('service_name','id');
         $clients = Client::where('user_id',Auth::user()->id)->pluck('client_name','id');
         return view('events', compact('calendar_details', 'services','clients'));

@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration
             $table->integer('user_id');
             $table->timestamps();
             $table->string('service_name');
-            $table->time('duration');
+            $table->integer('duration');
             $table->decimal('amount', 10, 2);
         });
     }

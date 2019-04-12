@@ -18,8 +18,9 @@ class ProfileController extends Controller
         return view('profile', compact('user'));
     }
     public function editProfile(Request $request){
+        $id = Auth::user()->id;
         $validator = Validator::make($request->all(),[
-            'email'=>'required|unique:users',
+            'email'=>'required|unique:users,email,'.$id,
             'firstname'=>'required',
             'lastname'=>'required',
             'patronymic'=>'required',
@@ -33,6 +34,12 @@ class ProfileController extends Controller
 
         $user = Auth::user();
         $user->email = $request['email'];
+        $user->firstname = $request['firstname'];
+        $user->lastname = $request['lastname'];
+        $user->patronymic = $request['patronymic'];
+        $user->address = $request['address'];
+        $user->welcome_message = $request['welcome_message'];
+        $user->schedule = $request['schedule'];
         $user->save();
 
         \Session::flash('success','Profile changed successfully.');

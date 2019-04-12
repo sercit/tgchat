@@ -18,7 +18,7 @@ class CreateEventsTable extends Migration
             $table->timestamps();
             $table->integer('service_id')->unsigned();
             $table->integer('client_id')->unsigned();
-            $table->date('start_date');
+            $table->dateTime('start_date');
         });
     }
 

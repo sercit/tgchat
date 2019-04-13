@@ -61,8 +61,9 @@ class ClientController extends Controller
         return Redirect::to('clients');
     }
     public function destroy(Request $request, $id){
-        $clients = Client::where('id',$id)->get()->first();
-        $clients->delete();
+        $client = Client::where('id',$id)->get()->first();
+        $client->events()->delete();
+        $client->delete();
         return Redirect::to('/clients');
     }
 }

@@ -67,9 +67,10 @@
             <div class="panel-body">
                 <div class="row">
                 @foreach($orders as $order)
+                    {!! Form::open(array('method'=>'POST', 'files'=>'true')) !!}
                     <div class="col-xs-4 card" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">{{$order->service_name}}</h5>
+                            <h5 class="card-title">{{$order->service_name}} - {{$order->id}}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{$order->duration}}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{$order->amount}}Р</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{$order->name}}</h6>
@@ -79,6 +80,7 @@
                             <a href="{{route('orders.cancel', $order->id)}}" class="card-link">Отменить</a>
                         </div>
                     </div>
+                        {!! Form::close() !!}
                 @endforeach
                 </div>
             </div>

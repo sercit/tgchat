@@ -37,7 +37,15 @@ class EventController extends Controller
                                         'timeFormat' => 'H:mm',
                                         'allDaySlot'=> false,
                                         'navLinks' => true,
-                                        'locales'=> 'ru',
+                                        'locales'=>'ruLocale',
+                                        'locale'=>'ru',
+                                        'businessHours'=>'
+                                        {
+
+                                            start: \'11:00\',
+                                                end:   \'12:00\',
+                                                dow: [ 1, 2, 3, 4, 5]
+                                        }',
 
                                     ])->setCallbacks([
                                         'eventClick' => 'function(info){console.log(info)}',

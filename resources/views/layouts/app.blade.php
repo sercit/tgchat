@@ -106,6 +106,8 @@
     <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
     @yield('pageScript')
 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/ru.js' defer></script>
+
 
 </body>
 </html>

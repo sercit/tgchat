@@ -57,6 +57,7 @@
             <div class="panel-heading">MY Event Details</div>
             <div class="panel-body">
                 {!! $calendar_details->calendar() !!}
+
             </div>
         </div>
     </div>
@@ -64,4 +65,5 @@
 
 @section('pageScript')
     {!! $calendar_details->script() !!}
+
 @endsection

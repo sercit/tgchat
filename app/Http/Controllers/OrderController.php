@@ -6,6 +6,8 @@ use App\Service;
 use Illuminate\Http\Request;
 use App\Order;
 use Auth;
+use App\Event;
+use App\Client;
 use Validator;
 use Illuminate\Support\Facades\Redirect;
 
@@ -16,8 +18,10 @@ class OrderController extends Controller
     }
 
     public function index(){
-        //ВОТ ЗДЕСЬ МНЕ НАДО ПОЛУЧИТЬ ВСЕ order, у которых service_id тех Service, что принадлежат Auth::user()->id
-        $orders = Order::leftJoin('services', 'orders.service_id','=','services.id')->where('user_id', Auth::user()->id)->get();
+        $orders = Order::select(['services.*','orders.*'])
+                        ->where('user_id', Auth::user()->id)
+                        ->join('services', 'orders.service_id','=','services.id')
+                        ->get();
         $services = Service::where('user_id',Auth::user()->id)->pluck('service_name','id');
         return view('orders', compact('orders','services'));
     }
@@ -45,12 +49,29 @@ class OrderController extends Controller
         \Session::flash('success','Order added successfully.');
         return Redirect::to('orders');
     }
-    public function confirm($id2,$id){
-        var_dump($id);
+    public function confirm($id){
+        $order = Order::where('id',$id)->with('service')->first();
+        $event = new Event();
+        $event->service_id = $order->service->id;
+        $event->start_date = $order->date;
+        $old_client = Client::where('client_name', $order->name)->where('phone', $order->phone)->where('id', Auth::user()->id)->first();
+
+        if($old_client===null) {  //if this master didn't have client with this data, it'll add it
+            $client = new Client();
+            $client->client_name = $order->name;
+            $client->phone = $order->phone;
+            $client->user_id = Auth::user()->id;
+            $client->save();
+        }else{
+            $client=$old_client;
+        }
+        $event->client_id = $client->id;
+        $event->save();
+        $order->delete();
         return Redirect::to('orders');
     }
-    public function cancel($id2,$id){
-        var_dump($id);
+    public function cancel($id){
+        $order = Order::where('id',$id)->with('service')->first()->delete();
         return Redirect::to('orders');
     }
 

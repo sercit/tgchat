@@ -30,19 +30,19 @@
                     </div>
                     <div class="col-xs-12">
                         <div class="form-group">
-                            {!! Form::label('firstname', 'Имя:') !!}
+                            {!! Form::label('lastname', 'Фамилия:') !!}
                             <div class="">
-                            {!! Form::text('firstname',$user->firstname, ['class'=>'form-control']) !!}
-                            {!! $errors->first('firstname','<p class="alert alert-danger">:message</p>') !!}
+                                {!! Form::text('lastname',$user->lastname, ['class'=>'form-control']) !!}
+                                {!! $errors->first('lastname','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12">
                         <div class="form-group">
-                            {!! Form::label('lastname', 'Фамилия:') !!}
+                            {!! Form::label('firstname', 'Имя:') !!}
                             <div class="">
-                                {!! Form::text('lastname',$user->lastname, ['class'=>'form-control']) !!}
-                                {!! $errors->first('lastname','<p class="alert alert-danger">:message</p>') !!}
+                            {!! Form::text('firstname',$user->firstname, ['class'=>'form-control']) !!}
+                            {!! $errors->first('firstname','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
                     </div>

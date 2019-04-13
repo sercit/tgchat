@@ -55,7 +55,7 @@
                                     <h5 class="card-title">{{$client->client_name}}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">{{$client->phone}}</h6>
                                     <a href="{{url ('/clients/'.$client->id)}}" class="card-link">Редактировать</a>
-                                    <a href="#" class="card-link">Another link</a>
+                                    <a href="{{url ('/clients/'.$client->id.'/destroy')}}" class="card-link">Удалить</a>
                               </div>
                             </div>
                     @endforeach

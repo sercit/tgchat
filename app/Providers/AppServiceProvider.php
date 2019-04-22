@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace TGChat\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

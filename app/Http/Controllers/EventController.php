@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TGChat\Http\Controllers;
 
-use App\Service;
-use App\Client;
+use TGChat\Service;
+use TGChat\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Controllers\Controller;
+use TGChat\Http\Controllers\Controller;
 use Auth;
 use Validator;
-use App\Event;
+use TGChat\Event;
 
 use MaddHatter\LaravelFullcalendar\Facades\Calendar;
 
@@ -23,8 +23,9 @@ class EventController extends Controller
         $events = Event::get();
         $event_list = [];
         foreach ($events as $key => $event){
+            //$this->checkIntersections($event_list, $event);
             $event_list[] = Calendar::event(
-                $event->service->service_name.'</span><br/></span>'.$event->client->phone,
+                $event->service->name.' - '.$event->client->client_name.'('.$event->client->phone.')',
                 false,
                 new \DateTime($event->start_date),
                 new \DateTime($event->start_date.' +'.$event->service->duration.' minutes')
@@ -76,5 +77,20 @@ class EventController extends Controller
 
         \Session::flash('success','Event added successfully.');
         return Redirect::to('events');
+    }
+    public function checkIntersections($events, $newEvent){
+        foreach ($events as $event){
+            $oldEventStartDate   = strtotime($event->start->format('Y-m-d H:i:s'));
+            $oldEventEndDate = strtotime($event->end->format('Y-m-d H:i:s'));
+            $newEventStartDate = strtotime($newEvent->start_date);
+            $newEventEndDate = $newEvent->service->duration+$newEventStartDate;
+            if($oldEventStartDate<$newEventEndDate AND $oldEventEndDate>$newEventStartDate){
+                $newEvent->name = '(П)'.$newEvent->service->service_name;
+                return;
+            }else{
+                $newEvent->name = $newEvent->service->service_name;
+            }
+        }
+        return true;
     }
 }

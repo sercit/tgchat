@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TGChat\Http\Controllers;
 
-use App\Client;
+use TGChat\Client;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;

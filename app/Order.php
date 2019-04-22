@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace TGChat;
 
 use Illuminate\Database\Eloquent\Model;
 

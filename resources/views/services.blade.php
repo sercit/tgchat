@@ -66,7 +66,7 @@
                             <h6 class="card-subtitle mb-2 text-muted">{{$service->duration}}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{$service->amount}}Р</h6>
                             <a href="{{url ('/services/'.$service->id)}}" class="card-link">Редактировать</a>
-                            <a href="#" class="card-link">Another link</a>
+                            <a href="{{url ('/services/'.$service->id).'/destroy'}}" class="card-link">Удалить</a>
                         </div>
                     </div>
                 @endforeach

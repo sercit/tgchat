@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'TGChat'),
 
     /*
     |--------------------------------------------------------------------------
@@ -169,11 +169,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        TGChat\Providers\AppServiceProvider::class,
+        TGChat\Providers\AuthServiceProvider::class,
+        // TGChat\Providers\BroadcastServiceProvider::class,
+        TGChat\Providers\EventServiceProvider::class,
+        TGChat\Providers\RouteServiceProvider::class,
         /*
          * Application Datatable
          */

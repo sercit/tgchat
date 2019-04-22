@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TGChat\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use TGChat\User;
 use Auth;
 use Validator;
 use Illuminate\Support\Facades\Redirect;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace TGChat;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -37,9 +37,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     public function services(){
-        return $this->hasMany('App\Service');
+        return $this->hasMany('TGChat\Service');
     }
     public function clients(){
-        return $this->hasMany('App\Client');
+        return $this->hasMany('TGChat\Client');
     }
 }

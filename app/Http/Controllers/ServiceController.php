@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TGChat\Http\Controllers;
 
 
 use Auth;
 use Validator;
-use App\Service;
+use TGChat\Service;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Controllers\Controller;
-
+use TGChat\Http\Controllers\Controller;
+use Bot;
 use Illuminate\Http\Request;
+
+
 
 class ServiceController extends Controller
 {
@@ -38,6 +40,17 @@ class ServiceController extends Controller
         $service->duration = $request['duration'];
         $service->amount = $request['amount'];
         $service->save();
+        $config = [
+            'conversation_cache_time' => 40, // Cache settings
+            'user_cache_time' => 30, // Cache settings
+            'web' => [ // Bringing in the web driver config
+                'matchingData' => [
+                    'driver' => 'web',
+                ],
+            ]
+        ];
+        $bot = new Bot();
+        $bot->getBotMan();
 
         \Session::flash('success','Service added successfully.');
         return Redirect::to('services');
@@ -69,6 +82,7 @@ class ServiceController extends Controller
     }
     public function destroy(Request $request, $id){
         $service = Service::where('id',$id)->get()->first();
+        $service->events->delete();
         $service->delete();
         return Redirect::to('/services');
     }

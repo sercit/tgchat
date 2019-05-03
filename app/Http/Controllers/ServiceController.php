@@ -6,9 +6,10 @@ namespace TGChat\Http\Controllers;
 use Auth;
 use Validator;
 use TGChat\Service;
+use TGChat\Http\Controllers\BotController;
 use Illuminate\Support\Facades\Redirect;
 use TGChat\Http\Controllers\Controller;
-use Bot;
+use TGChat\Bot;
 use Illuminate\Http\Request;
 
 
@@ -49,10 +50,8 @@ class ServiceController extends Controller
                 ],
             ]
         ];
-        $bot = new Bot();
-        $bot->getBotMan();
-
-        \Session::flash('success','Service added successfully.');
+        $botResponse = BotController::sendMessage("Маникюр", "235280030");
+        \Session::flash('success','Service added successfully.'.$botResponse);
         return Redirect::to('services');
     }
     public function showSingleService($single){

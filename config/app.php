@@ -39,8 +39,10 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
+    'Barryvdh\Debugbar\ServiceProvider',
 
+    'Debugbar' => 'Barryvdh\Debugbar\Facade',
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -232,6 +234,7 @@ return [
         'Calendar' => MaddHatter\LaravelFullcalendar\Facades\Calendar::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
     ],
 
 ];

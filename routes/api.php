@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use TelegramBot\Api\BotApi;
 /*
 |--------------------------------------------------------------------------
 | API Routes

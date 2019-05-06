@@ -10,12 +10,14 @@ use TGChat\Http\Controllers\BotController;
 use Illuminate\Support\Facades\Redirect;
 use TGChat\Http\Controllers\Controller;
 use TGChat\Bot;
+use TelegramBot\Api\Client;
 use Illuminate\Http\Request;
 
 
 
 class ServiceController extends Controller
 {
+    private static $token = "847119911:AAGA-qJu9WfPqQYFb7e0WTwt8QAfA0av7mo";
     public function __construct(){
         $this->middleware('auth');
     }
@@ -41,16 +43,11 @@ class ServiceController extends Controller
         $service->duration = $request['duration'];
         $service->amount = $request['amount'];
         $service->save();
-        $config = [
-            'conversation_cache_time' => 40, // Cache settings
-            'user_cache_time' => 30, // Cache settings
-            'web' => [ // Bringing in the web driver config
-                'matchingData' => [
-                    'driver' => 'web',
-                ],
-            ]
-        ];
-        $botResponse = BotController::sendMessage("Маникюр", "235280030");
+        $bot = new Client($this->token);
+        $bot->command('start', function ($message) use ($bot) {
+            $answer = 'Добро пожаловать!';
+            $bot->sendMessage($message->getChat()->getId(), $answer);
+        });
         \Session::flash('success','Service added successfully.'.$botResponse);
         return Redirect::to('services');
     }

@@ -1,8 +1,32 @@
 <?php
 namespace TGChat\Http\Controllers;
+
+
+use http\Env\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 class BotController extends Controller
 {
-    private static $token = "847119911:AAGA-qJu9WfPqQYFb7e0WTwt8QAfA0av7mo";
+//    private static $token = "847119911:AAGA-qJu9WfPqQYFb7e0WTwt8QAfA0av7mo";
+    public function index(Request $request){
+        return $request;
+    }
+    public function setWebhook(Request $request){
+        $result = $this->sendTelegramData('setwebhook',[
+            'query' => ['url'=> $request->url .'/'. \Telegram::getAccessToken()]
+        ]);
+        return redirect()->route('home')->with('status', $result);
+    }
+    public function getWebhookInfo(Request $request){
+        $result = $this->sendTelegramData('getWebhookInfo');
+        return redirect()->route('home')->with('status', $result);
+    }
+    public function sendTelegramData($route = '', $params= [], $method = 'POST'){
+        $client = new \GuzzleHttp\Client( ['base_uri' => 'https://api.telegram.org/bot'. \Telegram::getAccessToken().'/' ] );
+        $result = $client->request($method, $route, $params);
+        return (string) $result->getBody();
+    }
+
     public static function sendMessage($service,$chatid)
     {
         $mess = "Услуга \"".$service."\"создана!"; //сообщение, которое мы удем оправлять

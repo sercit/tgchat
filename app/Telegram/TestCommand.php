@@ -5,7 +5,7 @@ namespace App\Telegram;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 /**
- * Class HelpCommand.
+ * Class TestCommand.
  */
 class TestCommand extends Command
 {

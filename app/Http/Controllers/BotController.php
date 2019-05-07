@@ -9,7 +9,7 @@ class BotController extends Controller
 {
 //    private static $token = "847119911:AAGA-qJu9WfPqQYFb7e0WTwt8QAfA0av7mo";
     public function index(Request $request){
-        return $request;
+        return $request->all();
     }
     public function setWebhook(Request $request){
         $result = $this->sendTelegramData('setwebhook',[

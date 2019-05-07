@@ -40,6 +40,8 @@ Route::get('orders/{id}/confirm','OrderController@confirm')->name('orders.confir
 Route::post('orders/{id}/confirm','OrderController@confirm')->name('orders.confirm');
 Route::get('orders/{id}/cancel','OrderController@cancel')->name('orders.cancel');
 Route::post('orders/{id}/cancel','OrderController@cancel')->name('orders.cancel');
-Route::post('bot','BotController@index')->name('bot.receive');
+Route::post(Telegram::getAccessToken(), function(){
+    Telegram::commandsHandler(true);
+});
 Route::post('setwebhook', 'BotController@setWebhook')->name('setWebhook');
 Route::post('getwebhookinfo', 'BotController@getWebhookInfo')->name('getWebhookInfo');

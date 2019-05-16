@@ -42,4 +42,7 @@ class User extends Authenticatable
     public function clients(){
         return $this->hasMany('TGChat\Client');
     }
+    public function telegram_user(){
+        return $this->hasOne('TGChat\TelegramUser');
+    }
 }

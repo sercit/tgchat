@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://simonrusin.site'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -180,7 +180,8 @@ return [
          * Application Datatable
          */
         MaddHatter\LaravelFullcalendar\ServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class
+        Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

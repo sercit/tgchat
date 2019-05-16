@@ -13,11 +13,8 @@ use TGChat\Bot;
 use TelegramBot\Api\Client;
 use Illuminate\Http\Request;
 
-
-
 class ServiceController extends Controller
 {
-    private static $token = "847119911:AAGA-qJu9WfPqQYFb7e0WTwt8QAfA0av7mo";
     public function __construct(){
         $this->middleware('auth');
     }
@@ -43,11 +40,6 @@ class ServiceController extends Controller
         $service->duration = $request['duration'];
         $service->amount = $request['amount'];
         $service->save();
-        $bot = new Client($this->token);
-        $bot->command('start', function ($message) use ($bot) {
-            $answer = 'Добро пожаловать!';
-            $bot->sendMessage($message->getChat()->getId(), $answer);
-        });
         \Session::flash('success','Service added successfully.'.$botResponse);
         return Redirect::to('services');
     }

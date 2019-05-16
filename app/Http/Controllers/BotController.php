@@ -4,18 +4,22 @@ namespace TGChat\Http\Controllers;
 
 use http\Env\Request;
 use Telegram;
+use Log;
 
 class BotController extends Controller
 {
 //    private static $token = "847119911:AAGA-qJu9WfPqQYFb7e0WTwt8QAfA0av7mo";
     public function index(){
-        $update = Telegram::bot()->getWebwookUpdate();
-
+        $update = Telegram::bot()->getWebhookUpdate();
         $message = $update->getMessage();
         $user = $message->getFrom();
+        Telegram::bot()->sendChatAction([
+            'chat_id' => $user->getId(),
+            'action'=>'typing',
+        ]);
         Telegram::bot()->sendMessage([
-            'chat_id'=> $user->chat_id,
-            'text'=>'здарова',
+            'chat_id' => $user->getId(),
+            'text' => 'hey',
         ]);
     }
 //    public function setWebhook(Request $request){

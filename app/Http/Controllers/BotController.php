@@ -5,6 +5,7 @@ namespace TGChat\Http\Controllers;
 use http\Env\Request;
 use Telegram;
 use Log;
+use TGChat\TelegramUser;
 
 class BotController extends Controller
 {
@@ -17,10 +18,32 @@ class BotController extends Controller
             'chat_id' => $user->getId(),
             'action'=>'typing',
         ]);
-        Telegram::bot()->sendMessage([
-            'chat_id' => $user->getId(),
-            'text' => 'hey',
-        ]);
+        Log::debug(TelegramUser::find($user->getId()));
+        if(!TelegramUser::find($user->getId())){
+            Log::debug('123123');
+            Telegram::bot()->sendMessage([
+                'chat_id' => $user->getId(),
+                'text' => 'Здравствуйте, '.$user->getFirstName().' '.$user->getLastName(),
+            ]);
+            $user = json_decode($user, true);
+            $user['user_id'] = null; //оставляем id мастера пустым при регистрации.
+            TelegramUser::create($user);
+        }else{
+            $master = TelegramUser::find($user->getId())->user;
+
+            if($master == null){
+                Telegram::bot()->sendMessage([
+                    'chat_id' => $user->getId(),
+                    'text' => 'Здравствуйте, '.$user->getFirstName().' '.$user->getLastName(),
+                ]);
+            }
+            Telegram::bot()->sendMessage([
+                'chat_id' => $user->getId(),
+                'text' => 'Здравствуйте, '.$master->firstname.' '.$master->lastname,
+            ]);
+        }
+
+
     }
 //    public function setWebhook(Request $request){
 //        $result = $this->sendTelegramData('setwebhook',[

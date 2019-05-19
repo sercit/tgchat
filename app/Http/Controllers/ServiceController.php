@@ -40,7 +40,7 @@ class ServiceController extends Controller
         $service->duration = $request['duration'];
         $service->amount = $request['amount'];
         $service->save();
-        \Session::flash('success','Service added successfully.'.$botResponse);
+        \Session::flash('success','Service added successfully.');
         return Redirect::to('services');
     }
     public function showSingleService($single){
@@ -69,8 +69,8 @@ class ServiceController extends Controller
         return Redirect::to('services');
     }
     public function destroy(Request $request, $id){
-        $service = Service::where('id',$id)->get()->first();
-        $service->events->delete();
+        $service = Service::where('id',$id)->get();
+        $service->events()->delete();
         $service->delete();
         return Redirect::to('/services');
     }

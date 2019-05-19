@@ -4,6 +4,11 @@ namespace TGChat;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Post
+ *
+ * @mixin Eloquent
+ */
 class TelegramUser extends Model
 {
     //

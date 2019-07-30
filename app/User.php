@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'firstname','lastname','patronymic', 'phone', 'address','welcome_message','paid_until','schedule','email', 'password',
+        'firstname','lastname','patronymic', 'phone', 'address','welcome_message','paid_until','schedule','email', 'password', 'telegram_user_id', 'telegram_user_token',
     ];
 
     /**
@@ -38,6 +38,9 @@ class User extends Authenticatable
     ];
     public function services(){
         return $this->hasMany('TGChat\Service');
+    }
+    public function events(){
+        return $this->hasMany('TGChat\Event');
     }
     public function clients(){
         return $this->hasMany('TGChat\Client');

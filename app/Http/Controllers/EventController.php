@@ -73,6 +73,8 @@ class EventController extends Controller
         $event->start_date = $request['start_date'];
         $event->service_id = $request['service_id'];
         $event->client_id = $request['client_id'];
+        $event->telegram_user_id = null;
+        $event->user_id = Auth::user()->id;
         $event->save();
 
         \Session::flash('success','Event added successfully.');

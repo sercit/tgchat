@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('service_id', 'Service Name:') !!}
+                            {!! Form::label('service_id', 'Название услуги') !!}
                             <div class="">
                                 {!! Form::select('service_id', $services,null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('service_id','<p class="alert alert-danger">:message</p>') !!}
@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('client_id', 'Client:') !!}
+                            {!! Form::label('client_id', 'Клиент') !!}
                             <div class="">
                                 {!! Form::select('client_id', $clients,null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('client_id','<p class="alert alert-danger">:message</p>') !!}
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
-                            {!! Form::label('start_date', 'Start Date:') !!}
+                            {!! Form::label('start_date', 'Начало') !!}
                             <div class="">
                                 {!! Form::text('start_date', null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('start_date','<p class="alert alert-danger">:message</p>') !!}
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="col-xs-1 text-center">&nbsp;<br/>
-                        {!! Form::submit('Add Event', ['class'=>'btn btn-primary']) !!}
+                        {!! Form::submit('Добавить запись', ['class'=>'btn btn-primary']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}

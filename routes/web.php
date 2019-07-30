@@ -41,3 +41,4 @@ Route::post('orders/{id}/confirm','OrderController@confirm')->name('orders.confi
 Route::get('orders/{id}/cancel','OrderController@cancel')->name('orders.cancel');
 Route::post('orders/{id}/cancel','OrderController@cancel')->name('orders.cancel');
 Route::post('/bot'.env('TELEGRAM_BOT_TOKEN'), 'BotController@index');
+Route::get('/bot'.env('TELEGRAM_BOT_TOKEN'), 'BotController@index');

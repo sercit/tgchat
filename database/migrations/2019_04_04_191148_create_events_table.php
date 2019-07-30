@@ -16,9 +16,12 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->integer('service_id')->unsigned();
-            $table->integer('client_id')->unsigned();
-            $table->dateTime('start_date');
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('service_id')->unsigned()->nullable();
+            $table->integer('client_id')->unsigned()->nullable();
+            $table->dateTime('start_date')->nullable();
+            $table->integer('telegram_user_id')->nullable();
+
         });
     }
 

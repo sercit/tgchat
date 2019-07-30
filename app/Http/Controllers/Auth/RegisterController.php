@@ -71,11 +71,30 @@ class RegisterController extends Controller
             'lastname' => $data['lastname'],
             'patronymic' => $data['patronymic'],
             'address' => $data['address'],
+            'phone' => $data['phone'],
             'welcome_message' => 'Добро пожаловать',
-            'schedule' => '{"monday": "0-24", "tuesday":"0-24","wednesday":"0-24","thursday":"0-24","friday":"0-24","saturday":"0-24","sunday":"0-24"}',
+            'schedule' => '{"Monday": "10:00-19:00", "Tuesday":"10:00-19:00","Wednesday":"10:00-19:00","Thursday":"10:00-19:00","Friday":"10:00-19:00","Saturday":"10:00-19:00","Sunday":"10:00-19:00"}',
             'paid_until' => date('Y-m-d H:i:s', strtotime("+30 days")),
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'telegram_user_token' => $this->generateRandomString(5),
+
         ]);
+    }
+
+    /**
+     * Create the random string
+     *
+     * @param int $length - length of the return string
+     * @return string
+     */
+    protected function generateRandomString(int $length = 5):string {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }

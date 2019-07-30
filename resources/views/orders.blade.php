@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Event Calendar in Laravel 5 using Laravel-FullCalendar</div>
+            <div class="panel-heading">Заказы</div>
             <div class="panel-body">
                 {!! Form::open(array('route' => 'orders.add', 'method'=>'POST', 'files'=>'true')) !!}
                 <div class="row">
@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('service_id', 'Service Name:') !!}
+                            {!! Form::label('service_id', 'Услуга:') !!}
                             <div class="">
                                 {!! Form::select('service_id', $services,null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('service_id','<p class="alert alert-danger">:message</p>') !!}
@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div class="col-xs-1 text-center">&nbsp;<br/>
-                        {!! Form::submit('Add Order', ['class'=>'btn btn-primary']) !!}
+                        {!! Form::submit('Добавить заказ', ['class'=>'btn btn-primary']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}

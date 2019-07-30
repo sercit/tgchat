@@ -21,6 +21,8 @@ class CreateTelegramUsersTable extends Migration
             $table->string('username')->nullable();
             $table->string('language_code', 10);
             $table->integer('user_id')->nullable();
+            $table->string('last_message')->nullable();
+            $table->boolean('verified_master');
             $table->timestamps();
         });
     }

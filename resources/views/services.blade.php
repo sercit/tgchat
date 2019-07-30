@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-xs-4">
                         <div class="form-group">
-                            {!! Form::label('service_name', 'Service Name:') !!}
+                            {!! Form::label('service_name', 'Имя услуги:') !!}
                             <div class="">
                             {!! Form::text('service_name', null, ['class'=>'form-control']) !!}
                             {!! $errors->first('service_name','<p class="alert alert-danger">:message</p>') !!}
@@ -31,7 +31,7 @@
 
                     <div class="col-xs-3">
                         <div class="form-group">
-                            {!! Form::label('duration', 'Duration:') !!}
+                            {!! Form::label('duration', 'Продолжительность(в минутах):') !!}
                             <div class="">
                                 {!! Form::text('duration', null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('duration','<p class="alert alert-danger">:message</p>') !!}
@@ -41,7 +41,7 @@
 
                     <div class="col-xs-3">
                         <div class="form-group">
-                            {!! Form::label('amount', 'Amount:') !!}
+                            {!! Form::label('amount', 'Стоимость:') !!}
                             <div class="">
                                 {!! Form::text('amount', null, ['class'=>'form-control']) !!}
                                 {!! $errors->first('amount','<p class="alert alert-danger">:message</p>') !!}
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="col-xs-1 text-center">&nbsp;<br/>
-                        {!! Form::submit('Add Service', ['class'=>'btn btn-primary']) !!}
+                        {!! Form::submit('Добавить Услугу', ['class'=>'btn btn-primary']) !!}
                     </div>
                 </div>
                 {!! Form::close() !!}

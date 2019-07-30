@@ -16,4 +16,10 @@ class Event extends Model
     public function client(){
         return $this->belongsTo(Client::class);
     }
+    public function telegram_user(){
+        return $this->belongsTo(TelegramUser::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

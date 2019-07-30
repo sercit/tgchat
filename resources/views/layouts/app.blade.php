@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>TGChat</title>
+    <title>Бронебот</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -25,7 +25,7 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    TGChat
+                    Бронебот
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -42,11 +42,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Логин') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Регистрация') }}</a>
                                 </li>
                             @endif
                         @else
@@ -59,26 +59,26 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Выйти') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ url('events') }}">
-                                        {{ __('Events') }}
+                                        {{ __('Записи') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ url('clients') }}">
-                                        {{ __('Clients') }}
+                                        {{ __('Клиенты') }}
                                     </a>
 
                                     <a class="dropdown-item" href="{{ url('services') }}">
-                                        {{ __('Services') }}
+                                        {{ __('Услуги') }}
                                     </a>
 
 
                                     <a class="dropdown-item" href="{{ url('profile') }}">
-                                        {{ __('Profile') }}
+                                        {{ __('Профиль') }}
                                     </a>
 
                                     <a class="dropdown-item" href="{{ url('orders') }}">
-                                        {{ __('Orders') }}
+                                        {{ __('Заказы') }}
                                     </a>
 
 
@@ -102,8 +102,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/jquery.min.js') }}"></script>
-    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
-    <script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
+    <script src="{{ asset('js/moment.min.js') }}"></script>
+    <script src="{{ asset('js/fullcalendar.min.js') }}"></script>
     @yield('pageScript')
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/ru.js' defer></script>

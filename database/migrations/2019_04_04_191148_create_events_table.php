@@ -19,8 +19,13 @@ class CreateEventsTable extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('service_id')->unsigned()->nullable();
             $table->integer('client_id')->unsigned()->nullable();
+            $table->integer('duration')->unsigned()->nullable();
+            $table->integer('amount')->unsigned()->nullable();
+            $table->integer('client_telegram_id')->unsigned()->nullable();
             $table->dateTime('start_date')->nullable();
+            $table->longText('comment')->nullable();
             $table->integer('telegram_user_id')->nullable();
+
 
         });
     }

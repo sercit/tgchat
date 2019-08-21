@@ -20,15 +20,39 @@ class EventController extends Controller
         $this->middleware('auth');
     }
     public function index(){
-        $events = Event::get();
+        $events = Event::where('user_id', Auth::user()->id)->get();
         $event_list = [];
         foreach ($events as $key => $event){
+            if($event->duration == null){
+                $serviceName = $event->service->service_name;
+                $duration = $event->service->duration;
+            }else{
+                $duration = $event->duration;
+                if(!$event->service) {
+                    if (!$event->amount) {
+                        $serviceName = 'Перерыв';
+                    } else {
+                        $serviceName = 'Услуга уже удалена';
+                    }
+                }else{
+                    $serviceName = $event->service->service_name;
+                }
+
+            }
+            if($event->client){
+                $clientName = $event->client->client_name;
+                $phone = $event->client->phone;
+            }else{
+                $clientName = 'Имя клиента недоступно';
+                $phone = 'Телефон клиента недоступен';
+            }
             //$this->checkIntersections($event_list, $event);
             $event_list[] = Calendar::event(
-                $event->service->name.' - '.$event->client->client_name.'('.$event->client->phone.')',
+                $serviceName.PHP_EOL.
+                    $clientName.'('.$phone.')',
                 false,
                 new \DateTime($event->start_date),
-                new \DateTime($event->start_date.' +'.$event->service->duration.' minutes')
+                new \DateTime($event->start_date.' +'.$duration.' minutes')
             );
         }
         $calendar_details = Calendar::addEvents($event_list)
@@ -73,8 +97,10 @@ class EventController extends Controller
         $event->start_date = $request['start_date'];
         $event->service_id = $request['service_id'];
         $event->client_id = $request['client_id'];
+        $event->client_telegram_id = null;
         $event->telegram_user_id = null;
         $event->user_id = Auth::user()->id;
+        $event->amount = Service::find($request['service_id'])->amount;
         $event->save();
 
         \Session::flash('success','Event added successfully.');

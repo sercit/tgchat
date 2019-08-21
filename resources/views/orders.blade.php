@@ -50,7 +50,7 @@
                         <div class="form-group">
                             {!! Form::label('date', 'Дата:') !!}
                             <div class="">
-                                {!! Form::text('date', null, ['class'=>'form-control']) !!}
+                                {!! Form::text('date', null, ['class'=>'form-control','autocomplete'=>'off']) !!}
                                 {!! $errors->first('date','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
@@ -87,4 +87,18 @@
 
         </div>
     </div>
+
 @endsection
+@section('pageScript')
+    <link rel="stylesheet" type="text/css" href="js/jquery.datetimepicker.css"/>
+    <script src="js/build/jquery.datetimepicker.full.js"></script>
+    <script>
+        $('#date').datetimepicker({
+            format:'Y-m-d H:i:00',
+            lang:'ru',
+            step:15,
+            minDate:0,
+        });
+    </script>
+@endsection
+

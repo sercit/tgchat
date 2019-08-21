@@ -19,6 +19,7 @@ class CreateClientsTable extends Migration
             $table->string('client_name');
             $table->string('phone')->nullable();
             $table->integer('user_id')->unsigned();
+            $table->string('telegram_id')->nullable();
         });
     }
 

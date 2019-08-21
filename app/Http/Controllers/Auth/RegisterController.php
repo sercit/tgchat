@@ -7,6 +7,7 @@ use TGChat\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Log;
 
 class RegisterController extends Controller
 {
@@ -66,6 +67,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if($data['phone'][0] == '8'){
+           $data['phone'][0] = '7';
+        }elseif($data['phone'][0] == '+'){
+            $data['phone'] = substr($data['phone'],1);
+        }
+        Log::debug($data);
         return User::create([
             'firstname' => $data['firstname'],
             'lastname' => $data['lastname'],
@@ -75,7 +82,7 @@ class RegisterController extends Controller
             'welcome_message' => 'Добро пожаловать',
             'schedule' => '{"Monday": "10:00-19:00", "Tuesday":"10:00-19:00","Wednesday":"10:00-19:00","Thursday":"10:00-19:00","Friday":"10:00-19:00","Saturday":"10:00-19:00","Sunday":"10:00-19:00"}',
             'paid_until' => date('Y-m-d H:i:s', strtotime("+30 days")),
-            'email' => $data['email'],
+            'email' => strtolower($data['email']),
             'password' => Hash::make($data['password']),
             'telegram_user_token' => $this->generateRandomString(5),
 

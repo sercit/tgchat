@@ -15,4 +15,7 @@ class Client extends Model
     public function events(){
         return $this->hasMany(Event::class);
     }
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
 }

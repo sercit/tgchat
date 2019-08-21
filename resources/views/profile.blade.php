@@ -198,7 +198,7 @@
                         <div class="form-group">
                             {!! Form::label('schedule_sunday_begin_hours', 'Воскресенье C:') !!}
                             <div class="">
-                                {!! Form::select('schedule_sunday_begin_hours', array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'), explode(':',explode('-',$schedule->Sunday)[0])[0],['class'=>'form-control']); !!}
+                                {!! Form::select('schedule_sunday_begin__hours', array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'), explode(':',explode('-',$schedule->Sunday)[0])[0],['class'=>'form-control']); !!}
                                 {!! $errors->first('schedule_sunday_begin__hours','<p class="alert alert-danger">:message</p>') !!}
                                 {!! Form::select('schedule_sunday_begin__minutes', array('00'=>'00','15'=>'15','30'=>'30','45'=>'45'), explode(':',explode('-',$schedule->Sunday)[0])[1],['class'=>'form-control']); !!}
                                 {!! $errors->first('schedule_sunday_begin__minutes','<p class="alert alert-danger">:message</p>') !!}
@@ -207,7 +207,7 @@
                         <div class="form-group">
                             {!! Form::label('schedule_sunday_end_hours', 'Воскресенье По:') !!}
                             <div class="">
-                                {!! Form::select('schedule_sunday_end_hours', array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'), explode(':',explode('-',$schedule->Sunday)[1])[0],['class'=>'form-control']); !!}
+                                {!! Form::select('schedule_sunday_end__hours', array('00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'), explode(':',explode('-',$schedule->Sunday)[1])[0],['class'=>'form-control']); !!}
                                 {!! $errors->first('schedule_sunday_end__hours','<p class="alert alert-danger">:message</p>') !!}
                                 {!! Form::select('schedule_sunday_end__minutes', array('00'=>'00','15'=>'15','30'=>'30','45'=>'45'), explode(':',explode('-',$schedule->Sunday)[1])[1],['class'=>'form-control']); !!}
                                 {!! $errors->first('schedule_sunday_end__minutes','<p class="alert alert-danger">:message</p>') !!}

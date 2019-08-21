@@ -20,7 +20,8 @@ class CreateOrdersTable extends Migration
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->integer('client_id')->nullable();
-            $table->integer('telegram_user_id')->nullable();
+            $table->integer('client_telegram_id')->nullable();
+            $table->longText('comment')->nullable();
             $table->dateTime('date')->nullable();
         });
     }

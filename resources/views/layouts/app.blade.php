@@ -102,8 +102,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/moment.min.js') }}"></script>
-    <script src="{{ asset('js/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('moment.min.js') }}"></script>
+    <script src="{{ asset('fullcalendar.min.js') }}"></script>
     @yield('pageScript')
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/ru.js' defer></script>

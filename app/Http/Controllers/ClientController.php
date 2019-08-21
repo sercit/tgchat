@@ -32,6 +32,7 @@ class ClientController extends Controller
             $client->client_name = $request['client_name'];
             $client->user_id = Auth::user()->id;
             $client->phone = $request['phone'];
+            $client->telegram_id = null;
             $client->save();
 
             \Session::flash('success','Client was added successfully.');

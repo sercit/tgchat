@@ -45,6 +45,7 @@ class OrderController extends Controller
         $order->phone = $request['phone'];
         $order->date = $request['date'];
         $order->client_id = null;
+        $order->client_telegram_id = null;
         $order->save();
 
         \Session::flash('success','Order added successfully.');

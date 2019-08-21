@@ -41,7 +41,7 @@
                         <div class="form-group">
                             {!! Form::label('start_date', 'Начало') !!}
                             <div class="">
-                                {!! Form::text('start_date', null, ['class'=>'form-control']) !!}
+                                {!! Form::text('start_date', null, ['class'=>'form-control','autocomplete'=>'off']) !!}
                                 {!! $errors->first('start_date','<p class="alert alert-danger">:message</p>') !!}
                             </div>
                         </div>
@@ -57,7 +57,6 @@
             <div class="panel-heading">MY Event Details</div>
             <div class="panel-body">
                 {!! $calendar_details->calendar() !!}
-
             </div>
         </div>
     </div>
@@ -65,5 +64,14 @@
 
 @section('pageScript')
     {!! $calendar_details->script() !!}
-
+    <link rel="stylesheet" type="text/css" href="js/jquery.datetimepicker.css"/>
+    <script src="js/build/jquery.datetimepicker.full.js"></script>
+    <script>
+            $('#start_date').datetimepicker({
+                format:'Y-m-d H:i:00',
+                lang:'ru',
+                step:15,
+                minDate:0,
+            });
+    </script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace TGChat\Http\Controllers;
 
+use TGChat\Order;
 use TGChat\Service;
 use TGChat\Client;
 use Illuminate\Http\Request;
@@ -80,7 +81,96 @@ class EventController extends Controller
         return view('events', compact('calendar_details', 'services','clients'));
     }
     //
+    public function checkIntersections($order){
+        $master = $order->service->user;
+        $day = date('Y-m-d',strtotime($order->date));
+        $dayOfWeek = date('l',strtotime($order->date));
+        $time = date("H:i",strtotime($order->date));
+        $schedule = json_decode($master->schedule, true);
+        [$dayStart,$dayEnd] = explode('-',$schedule[$dayOfWeek]);
 
+
+        //Это позволяет записывать несмотря на расписание
+        $dayStart = '00:00:00';
+        $dayEnd = '23:59:59';
+
+        $dayStartTimestamp = strtotime($day.' '.$dayStart);
+        $dayEndTimestamp = strtotime($day.' '.$dayEnd);
+        $availableTimes = [];
+
+        $eventsForChosenDay = Event::where('user_id',Auth::user()->id)->where('start_date','LIKE', '%'.$day.'%')->orderBy('start_date','asc')->get();
+        if(count($eventsForChosenDay)){
+        }
+        $i=0;
+        $count = count($eventsForChosenDay);
+        foreach ($eventsForChosenDay as $event){
+            $i++;
+            if($event->service) {
+                $duration = $event->service->duration;
+            }else{
+                $duration = $event->duration;
+            }
+            $gapEndTimestamp = strtotime($event->start_date);
+            if($i == 1){
+                $gapStartTimestamp = $dayStartTimestamp;
+            }else{
+                $prevEventStartTimestamp = strtotime($eventsForChosenDay[$i-2]->start_date);
+                if($eventsForChosenDay[$i-1]->service){
+                    $prevEventDuration = $eventsForChosenDay[$i-1]->service->duration;
+                }else{
+                    $prevEventDuration = $eventsForChosenDay[$i-1]->duration;
+                }
+                $prevEventEndTimestamp = $prevEventStartTimestamp + $prevEventDuration*60;
+                $gapStartTimestamp =  $prevEventEndTimestamp;
+            }
+
+
+            $gap = ($gapEndTimestamp - $gapStartTimestamp)/60;
+            if($gap >= $duration){
+                $availableTimes[] = [$gapStartTimestamp,$gapEndTimestamp];
+            }
+            if($i == $count){
+                if($event->service) {
+                    $gapStartTimestamp = strtotime($event->start_date) + $event->service->duration * 60;
+                }else{
+                    $gapStartTimestamp = strtotime($event->start_date) + $event->duration * 60;
+                }
+                $gapEndTimestamp = $dayEndTimestamp;
+                $gap = ($gapEndTimestamp - $gapStartTimestamp)/60;
+                if($gap >= $duration){
+                    $availableTimes[] = [$gapStartTimestamp,$gapEndTimestamp];
+                }
+            }
+        }
+        $dayTimes = $dayStartTimestamp;
+        $availableDayTimes = [];
+        do{
+            if($count == 0){
+                if($dayTimes >= $dayStartTimestamp[0] && $dayTimes <= ($dayEndTimestamp - $order->service->duration*60)){
+                    $availableDayTimes[] = $dayTimes;
+                    $dayTimes += 15*60;
+                    continue;
+                }
+            }
+            foreach ($availableTimes as $availableTime){
+                if($dayTimes >= $availableTime[0] && $dayTimes <= ($availableTime[1] - $order->service->duration*60)){
+                    $availableDayTimes[] = $dayTimes;
+                    break;
+                }
+            }
+            $dayTimes += 15*60;
+        }while($dayTimes < $dayEndTimestamp);
+        $availableButtons = [];
+        foreach ($availableDayTimes as $availableTime) {
+            $text = date('H:i', $availableTime);
+            $availableButtons[] = $text;
+        }
+        if(in_array($time, $availableButtons)){
+            return [];
+        }else{
+            return $availableButtons;
+        }
+    }
     public function addEvent(Request $request){
         $validator = Validator::make($request->all(),[
             'start_date'=>'required',
@@ -92,33 +182,42 @@ class EventController extends Controller
             \Session::flash('warning','Please enter the valid details');
             return Redirect::to('/events')->withInput()->withErrors($validator);
         }
-
-        $event = new Event();
-        $event->start_date = $request['start_date'];
-        $event->service_id = $request['service_id'];
-        $event->client_id = $request['client_id'];
-        $event->client_telegram_id = null;
-        $event->telegram_user_id = null;
-        $event->user_id = Auth::user()->id;
-        $event->amount = Service::find($request['service_id'])->amount;
-        $event->save();
-
-        \Session::flash('success','Event added successfully.');
-        return Redirect::to('events');
-    }
-    public function checkIntersections($events, $newEvent){
-        foreach ($events as $event){
-            $oldEventStartDate   = strtotime($event->start->format('Y-m-d H:i:s'));
-            $oldEventEndDate = strtotime($event->end->format('Y-m-d H:i:s'));
-            $newEventStartDate = strtotime($newEvent->start_date);
-            $newEventEndDate = $newEvent->service->duration+$newEventStartDate;
-            if($oldEventStartDate<$newEventEndDate AND $oldEventEndDate>$newEventStartDate){
-                $newEvent->name = '(П)'.$newEvent->service->service_name;
-                return;
-            }else{
-                $newEvent->name = $newEvent->service->service_name;
-            }
+        $order = new Order();
+        $order->service_id = $request['service_id'];
+        $client = Client::where('id','=',$request['client_id'])->get()->first();
+        $order->client_id = $client->id;
+        $order->name = $client->client_name;
+        $order->phone = $client->phone;
+        if($client->telegram_id != null){
+            $order->client_telegram_id = $client->telegram_id;
         }
-        return true;
+        $order->service_id = $request['service_id'];
+        $order->comment = null;
+        $order->date = $request['start_date'];
+        $order->created_at = date("Y-m-d H:i:s");
+        $order->updated_at = date("Y-m-d H:i:s");
+        $order->save();
+        $intersections = $this->checkIntersections($order);
+        if(count($intersections)){
+            $times = implode(', ',$intersections);
+            $text = "На это время уже есть запись. Свободные места: ".$times. '!';
+            \Session::flash('warning',$text);
+            $order->delete();
+        }else{
+            $event = new Event();
+            $event->start_date = $order->date;
+            $event->service_id = $order->service_id;
+            $event->client_id = $order->client_id;
+            $event->client_telegram_id = $order->client_telegram_id;
+            $event->telegram_user_id = null;
+            $event->user_id = Auth::user()->id;
+            $event->amount = $order->service->amount;
+            $event->save();
+
+            \Session::flash('success','Запись создана успешно');
+        }
+        return Redirect::to('events');
+
+
     }
 }

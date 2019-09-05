@@ -20,6 +20,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        '*bot847119911:*'
+        '*bot815886397:*'
     ];
 }

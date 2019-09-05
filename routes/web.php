@@ -40,7 +40,7 @@ Route::get('orders/{id}/confirm','OrderController@confirm')->name('orders.confir
 Route::post('orders/{id}/confirm','OrderController@confirm')->name('orders.confirm');
 Route::get('orders/{id}/cancel','OrderController@cancel')->name('orders.cancel');
 Route::post('orders/{id}/cancel','OrderController@cancel')->name('orders.cancel');
-Route::post('/bot847119911:AAHSmmLUOVoP6pSHkXQjMvd5P_-BDcBIEIk','BotController@index');
-//847119911:AAHSmmLUOVoP6pSHkXQjMvd5P_-BDcBIEIk
+Route::post('/bot815886397:AAFcQV_11JHtoOJUpsXs_kxArSu_Ca2tjUM','BotController@index');
+//815886397:AAFcQV_11JHtoOJUpsXs_kxArSu_Ca2tjUM
 //Route::post('/bot'.env('TELEGRAM_BOT_TOKEN'), 'BotController@index');
 //Route::get('/bot'.env('TELEGRAM_BOT_TOKEN'), 'BotController@index');

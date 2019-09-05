@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Event Calendar in Laravel 5 using Laravel-FullCalendar</div>
+            <div class="panel-heading">Мои записи</div>
             <div class="panel-body">
                 {!! Form::open(array('route' => 'events.add', 'method'=>'POST', 'files'=>'true')) !!}
                 <div class="row">

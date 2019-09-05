@@ -19,7 +19,6 @@
                         @endif
 
                     </div>
-
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="id">id</label>
@@ -28,6 +27,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="id">Введите код в Telegram:</label>
+                            <div class="">
+                                <p>{!! $user->telegram_user_token !!}</p>
+                            </div>
+                        </div>
+                    </div>
+		    <div style="clear:both;width:100%"></div>
                     <div class="col-xs-12">
                         <div class="form-group">
                             {!! Form::label('lastname', 'Фамилия:') !!}
@@ -237,15 +245,6 @@
                             <label for="id">Оплачено до:</label>
                             <div class="">
                                 <p>{!! $user->paid_until !!}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="id">Введите код в Telegram:</label>
-                            <div class="">
-                                <p>{!! $user->telegram_user_token !!}</p>
                             </div>
                         </div>
                     </div>

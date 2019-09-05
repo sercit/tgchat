@@ -439,6 +439,9 @@ class BotController extends Controller
         foreach($weeks as $week){
             $keyboardWeek = [];
             foreach ($week as $day){
+                if(strlen($day)==1){
+                    $day = '0'.$day;
+                }
                 $text = $day != '' ? $day.'.'.$month : ' ';
                 $keyboardWeek[] = Keyboard::inlineButton(['text' => $text, 'callback_data' => '{"request":"showMasterEvents'.$master->id.'","day":"'.$year.'-'.$month.'-'.$day.'"}']);
             }
@@ -592,6 +595,7 @@ class BotController extends Controller
     }
     public function keyboardAvailableTimeForBreak($event, $master){
         $event_id = $event->id;
+        $break = $event;
         $day = date('Y-m-d',strtotime($event->start_date));
         $dayOfWeek = date('l',strtotime($event->start_date));
         $schedule = json_decode($master->schedule, true);
@@ -599,22 +603,22 @@ class BotController extends Controller
         $dayStartTimestamp = strtotime($day.' '.$dayStart);
         $dayEndTimestamp = strtotime($day.' '.$dayEnd);
         $availableTimes = [];
-
-        $eventsForChosenDay = Event::where('user_id', $master->id)->where('start_date','LIKE', '%'.$day.'%')->where('id','<>',$event_id)->orderBy('start_date','asc')->get();
+        $eventsForChosenDay = Event::where('user_id', $master->id)->where('start_date','LIKE', '%'.$day.'%')->where('start_date','not like','%'.$day.' 00:00:00')->where('id','<>',$event_id)->orderBy('start_date','asc')->get();
         $i=0;
         $count = count($eventsForChosenDay);
         foreach ($eventsForChosenDay as $event){
-            $i++;
+
             $duration = $event->duration;
             $gapEndTimestamp = strtotime($event->start_date);
-            if($i == 1){
+            if($i == 0){
                 $gapStartTimestamp = $dayStartTimestamp;
+
             }else{
-                $prevEventStartTimestamp = strtotime($eventsForChosenDay[$i-2]->start_date);
-                if($eventsForChosenDay[$i-1]->service) {
-                    $prevEventDuration = $eventsForChosenDay[$i - 1]->service->duration;
+                $prevEventStartTimestamp = strtotime($eventsForChosenDay[$i-1]->start_date);
+                if($eventsForChosenDay[$i]->service) {
+                    $prevEventDuration = $eventsForChosenDay[$i]->service->duration;
                 }else{
-                    $prevEventDuration = $eventsForChosenDay[$i - 1]->duration;
+                    $prevEventDuration = $eventsForChosenDay[$i]->duration;
                 }
                 $prevEventEndTimestamp = $prevEventStartTimestamp + $prevEventDuration*60;
                 $gapStartTimestamp =  $prevEventEndTimestamp;
@@ -625,6 +629,7 @@ class BotController extends Controller
             if($gap >= $duration){
                 $availableTimes[] = [$gapStartTimestamp,$gapEndTimestamp];
             }
+            $i++;
             if($i == $count){
                 $gapStartTimestamp = strtotime($event->start_date) + $event->duration*60;
                 $gapEndTimestamp = $dayEndTimestamp;
@@ -633,21 +638,21 @@ class BotController extends Controller
                     $availableTimes[] = [$gapStartTimestamp,$gapEndTimestamp];
                 }
             }
+
         }
         $dayTimes = $dayStartTimestamp;
         $availableDayTimes = [];
         do{
             if($count == 0){
-                if($dayTimes >= $dayStartTimestamp[0] && $dayTimes <= ($dayEndTimestamp - $event->duration*60)){
+                if($dayTimes >= $dayStartTimestamp[0] && $dayTimes <= ($dayEndTimestamp - $break->duration*60)){
                     $availableDayTimes[] = $dayTimes;
                     $dayTimes += 15*60;
                     continue;
                 }
             }
             foreach ($availableTimes as $availableTime){
-                if($dayTimes >= $availableTime[0] && $dayTimes <= ($availableTime[1] - $event->duration*60)){
+                if($dayTimes >= $availableTime[0] && $dayTimes <= ($availableTime[1] - $break->duration*60)){
                     $availableDayTimes[] = $dayTimes;
-                    break;
                 }
             }
             $dayTimes += 15*60;
@@ -892,7 +897,7 @@ class BotController extends Controller
 
     public function sendMasterClients($telegramUser)
     {
-        $clients = Client::where('user_id', $telegramUser->user_id)->get();
+        $clients = Client::where('user_id', $telegramUser->user_id)->orderBy('client_name')->get();
         if(count($clients) > 0) {
             foreach ($clients as $client) {
                 if($client->client_name != null && $client->phone != null) {
@@ -1019,7 +1024,7 @@ class BotController extends Controller
         ]);
     }
 
-    public function sendMasterEvents($telegramUser,$events)
+    public function sendMasterEvents($telegramUser,$events = null)
     {
         foreach ($events as $event) {
 
@@ -1044,8 +1049,7 @@ class BotController extends Controller
                 $clientName = 'Имя клиента недоступно';
                 $phone = 'Телефон клиента недоступен';
             }
-
-
+            Log::debug($event->id);
             $keyboard = Keyboard::make()
                 ->inline()
                 ->row(
@@ -1097,9 +1101,10 @@ class BotController extends Controller
             ->row(
                 Keyboard::inlineButton(['text' => 'Назад', 'callback_data' => '{"request":"masterMenu"}']),
                 Keyboard::inlineButton(['text' => 'Добавить перерыв', 'callback_data' => '{"request":"masterBreak"}'])
-            )->row(
-                Keyboard::inlineButton(['text' => 'Удалить профиль', 'callback_data' => '{"request":"masterDelete"}'])
-            );
+	    );
+            //)->row(
+            //    Keyboard::inlineButton(['text' => 'Удалить профиль', 'callback_data' => '{"request":"masterDelete"}'])
+            //);
         Telegram::bot()->sendMessage([
             'chat_id' => $telegramUser->id,
             'text' => $text,
@@ -1122,6 +1127,16 @@ class BotController extends Controller
                 );
             $text = $days[$i-1];
             $time = $schedule["$day"];
+            if($time == '00:00-00:00'){
+                $time='Выходной';
+                $keyboard->row(
+                    Keyboard::inlineButton(['text' => 'Сделать рабочим днем', 'callback_data' => '{"request":"turnonSchedule' . $i . '"}'])
+                );
+            }else{
+                $keyboard->row(
+                    Keyboard::inlineButton(['text' => 'Сделать выходным', 'callback_data' => '{"request":"turnoffSchedule' . $i . '"}'])
+                );
+            }
             Telegram::bot()->sendMessage([
                 'chat_id' => $telegramUser->id,
                 'text' => $text.":".PHP_EOL.
@@ -1222,6 +1237,7 @@ class BotController extends Controller
         $dayOfWeek = date('l',strtotime($order->date));
         $schedule = json_decode($master->schedule, true);
         [$dayStart,$dayEnd] = explode('-',$schedule[$dayOfWeek]);
+
         $dayStartTimestamp = strtotime($day.' '.$dayStart);
         $dayEndTimestamp = strtotime($day.' '.$dayEnd);
         $availableTimes = [];
@@ -1763,12 +1779,13 @@ class BotController extends Controller
                         $orderDate = substr($order->date, 0,10);
                         $eventsForOrderDate = Event::where('user_id',$order->service->user->id)->where('start_date','LIKE', '%'.$orderDate.'%')->orderBy('start_date','asc')->get();
                         $orderDateBegin = strtotime($order->date);
-                        $orderDateEnd = strtotime($order->date) + strtotime($order->service->duration*60);
-
+                        $orderDateEnd = $orderDateBegin + $order->service->duration*60;
+                        $intersection = false;
                         foreach($eventsForOrderDate as $event){
+
                             $beginEvent = strtotime($event->start_date);
-                            $endEvent = strtotime($event->start_date) + strtotime($event->duration*60);
-                            if(($beginEvent < $orderDateBegin && $endEvent > $orderDateBegin) || ($beginEvent < $orderDateEnd && $endEvent > $orderDateEnd)){
+                            $endEvent = $beginEvent + $event->duration*60;
+                            if(($beginEvent <= $orderDateBegin && $endEvent > $orderDateBegin) || ($beginEvent < $orderDateEnd && $endEvent >= $orderDateEnd) || ($beginEvent >= $orderDateBegin && $endEvent <= $orderDateEnd) || ($beginEvent <= $orderDateBegin && $endEvent >= $orderDateEnd)){
                                 $clientTelegramId = $order->client_telegram_id;
                                 if($clientTelegramId != null  && $clientTelegramId != $telegramUser->id) {
                                     Telegram::bot()->sendMessage([
@@ -1850,8 +1867,12 @@ class BotController extends Controller
                     if (stripos($callback_data['request'], 'removeEvent') !== false) {
                         $eventId = intval(substr($callback_data['request'], 11));
                         $event = Event::where('id',$eventId)->get()->first();
+                        $masterId = $event->user_id;
+                        $day = substr($event->start_date,0,10);
                         $event->delete();
-                        $this->sendMasterEvents($telegramUser);
+                        $events = Event::where('user_id',$masterId)->where('start_date','LIKE', '%'.$day.'%')->where('start_date','not like','%'.$day.' 00:00:00')->orderBy('start_date','asc')->get();
+                        Log::debug($events);
+                        $this->sendMasterEvents($telegramUser,$events);
                         $this->sendMasterMenu($telegramUser);
                         $this->sendLastMessageAndSave($telegramUser, 'masterEvents');
                     }
@@ -1893,7 +1914,6 @@ class BotController extends Controller
                             ]);
                         }else {
                             $date = explode('/', substr($callback_data['request'], 15));
-                            Log::debug($date);
                             $event = Event::where('id', $callback_data['event'])->get()->first();
                             $event->user_id = $telegramUser->user_id;
                             $event->start_date = date('Y-m-d H:i:s', mktime(0, 0, 0, $date[1], $date[0], $date[2]));
@@ -1921,11 +1941,10 @@ class BotController extends Controller
                     }
                     if (stripos($callback_data['request'], 'masterBreakTime') !== false) {
                         $date = substr($callback_data['request'], 15);
-                        Log::debug($date);
+                        Log::debug(date('Y-m-d H:i:s',$date));
                         $event = Event::where('id',$callback_data['event'])->get()->first();
                         $event->user_id = $telegramUser->user->id;
                         $event->start_date = date('Y-m-d H:i:s',$date);
-                        Log::debug($event);
                         $event->save();
                         Telegram::bot()->sendMessage([
                             'chat_id' => $telegramUser->id,
@@ -2081,6 +2100,52 @@ class BotController extends Controller
                             $this->sendMasterMenu($telegramUser);
                         }
                     }
+                    if(stripos($callback_data['request'], 'turnoffSchedule') !== false) {
+                        $day = intval(substr($callback_data['request'], 15,1));
+                        $schedule = User::where('id', $telegramUser->user_id)->select('schedule')->get()->first();
+                        $dayNamesRu = ['Поенедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+                        $dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+                        Log::debug($dayNames[$day-1]);
+                        $newSchedule = json_decode(json_decode($schedule, true)['schedule'], true);
+                        Log::debug($newSchedule);
+                        $newSchedule[$dayNames[$day-1]] = '00:00-00:00';
+                        $schedule = "{";
+                        foreach($dayNames as $dayName){
+                            $schedule .= '"'.$dayName.'":"'.$newSchedule[$dayName].'"';
+
+                            if($dayName != 'Sunday'){
+                                $schedule .= ',';
+                            }
+                        }
+                        $schedule .= "}";
+                        $user = User::where('id',$telegramUser->user_id)->get()->first();
+                        $user->schedule = $schedule;
+                        $user->save();
+                        $this->sendMasterProfile($telegramUser);
+                    }
+                    if(stripos($callback_data['request'], 'turnonSchedule') !== false) {
+                        $day = intval(substr($callback_data['request'], 14,1));
+                        $schedule = User::where('id', $telegramUser->user_id)->select('schedule')->get()->first();
+                        $dayNamesRu = ['Поенедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+                        $dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+                        Log::debug($dayNames[$day-1]);
+                        $newSchedule = json_decode(json_decode($schedule, true)['schedule'],true);
+                        $newSchedule[$dayNames[$day-1]] = '10:00-19:00';
+                        $schedule = "{";
+                        foreach($dayNames as $dayName){
+                            $schedule .= '"'.$dayName.'":"'.$newSchedule[$dayName].'"';
+
+                            if($dayName != 'Sunday'){
+                                $schedule .= ',';
+                            }
+                        }
+                        $schedule .= "}";
+                        $user = User::where('id',$telegramUser->user_id)->get()->first();
+                        $user->schedule = $schedule;
+                        $user->save();
+                        $this->sendMasterProfile($telegramUser);
+                    }
+
                     if(stripos($callback_data['request'], 'changeAddress') !== false){
                         Telegram::bot()->sendMessage([
                             'chat_id' => $telegramUser->id,
@@ -2114,7 +2179,8 @@ class BotController extends Controller
                             ]);
                         }else {
                             $masterId = intval(substr($callback_data['request'], 16));
-                            $events = Event::where('user_id',$masterId)->where('start_date','LIKE', '%'.$callback_data['day'].'%')->get();
+                            Log::debug($callback_data['day']);
+                            $events = Event::where('user_id',$masterId)->where('start_date','LIKE', '%'.$callback_data['day'].'%')->where('start_date','not like', '%'.$callback_data['day'].' 00:00:00')->orderBy('start_date','asc')->get();
                             $this->sendMasterEvents($telegramUser,$events);
                             $this->sendMasterMenu($telegramUser);
                         }

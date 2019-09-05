@@ -71,7 +71,7 @@
                     <div class="col-xs-4 card" style="width: 18rem;">
                         <div class="card-body">
                             <h5 class="card-title">{{$order->service_name}} - {{$order->id}}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{$order->duration}}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Длительность в минутах - {{$order->duration}}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{$order->amount}}Р</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{$order->name}}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">{{$order->phone}}</h6>
